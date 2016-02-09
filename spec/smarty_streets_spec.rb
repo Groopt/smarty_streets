@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'net/http'
 
 describe SmartyStreets do
   let(:auth_id) { 'MYAUTHID' }

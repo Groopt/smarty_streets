@@ -5,6 +5,7 @@ module SmartyStreets
     class PaymentRequired < Exception; end
     class NoValidCandidates < Exception; end
     class RemoteServerError < Exception; end
+    class RequestTimeOut < Exception; end
 
     attr_accessor :location
 
@@ -20,11 +21,11 @@ module SmartyStreets
     private
 
     def handle_response(response)
-      raise InvalidCredentials if response.code == 401
-      raise MalformedData      if response.code == 400
-      raise PaymentRequired    if response.code == 402
-      raise RemoteServerError  if response.code == 500
-      raise NoValidCandidates  if response.body.nil?
+      fail InvalidCredentials if response.code == 401
+      fail MalformedData      if response.code == 400
+      fail PaymentRequired    if response.code == 402
+      fail RemoteServerError  if response.code == 500
+      fail NoValidCandidates  if response.body.nil?
 
       JSON.parse(response.body).collect do |l|
         location = Location.new
@@ -42,7 +43,18 @@ module SmartyStreets
     end
 
     def send_request(url)
-      HTTParty.get(url)
+      uri = URI.parse(url)
+
+      Net::HTTP.start(
+        uri.host, uri.port,
+        read_timeout: SmartyStreets.configuration.request_read_timeout,
+        open_timeout: SmartyStreets.configuration.request_open_timeout,
+        use_ssl: uri.port == 443
+      ) do |http|
+        http.request(Net::HTTP::Get.new(uri))
+      end
+    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED
+      raise RequestTimeOut
     end
 
     def build_request_url(location)

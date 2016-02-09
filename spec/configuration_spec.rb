@@ -7,6 +7,8 @@ describe SmartyStreets::Configuration do
       c.auth_id = 'MYAUTHID'
       c.auth_token = 'MYAUTHTOKEN'
       c.candidates = 1
+      c.request_read_timeout = 1
+      c.request_open_timeout = 1
     end
   end
 
@@ -24,5 +26,10 @@ describe SmartyStreets::Configuration do
 
   it 'sets the candidates' do
     expect(SmartyStreets.configuration.candidates).to eq 1
+  end
+
+  it 'sets the request timeout' do
+    expect(SmartyStreets.configuration.request_read_timeout).to eq 1
+    expect(SmartyStreets.configuration.request_open_timeout).to eq 1
   end
 end

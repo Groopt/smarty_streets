@@ -3,6 +3,8 @@ require 'spec_helper'
 describe SmartyStreets do
   let(:auth_id) { 'MYAUTHID' }
   let(:auth_token) { 'MYAUTHTOKEN' }
+  let(:request_read_timeout) { 5 }
+  let(:request_open_timeout) { 5 }
   let(:candidates) { 1 }
   let(:response) { double(:response, code: response_code, body: response_body) }
   let(:response_code) { }
@@ -14,9 +16,11 @@ describe SmartyStreets do
       c.auth_id    = auth_id
       c.auth_token = auth_token
       c.candidates = candidates
+      c.request_read_timeout = request_read_timeout
+      c.request_open_timeout = request_open_timeout
     end
 
-    allow(HTTParty).to receive(:get).and_return(response)
+    allow(Net::HTTP).to receive(:start).and_return(response)
   end
 
   context SmartyStreets::Request do

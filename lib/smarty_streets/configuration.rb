@@ -12,9 +12,15 @@ module SmartyStreets
     # Number of candidates to provide when making a request.
     attr_accessor :candidates
 
+    # HTTP Request Timeout
+    attr_accessor :request_read_timeout
+    attr_accessor :request_open_timeout
+
     def initialize
       @api_url = 'api.smartystreets.com'
       @candidates = 1
+      @request_read_timeout = 5
+      @request_open_timeout = 5
     end
   end
 end

@@ -1,6 +1,5 @@
 require 'cgi'
 require 'json'
-require 'httparty'
 require 'smarty_streets/version'
 require 'smarty_streets/configuration'
 require 'smarty_streets/location'
@@ -16,6 +15,8 @@ module SmartyStreets
     #     config.auth_id = 'AUTHID'
     #     config.auth_token = 'AUTHTOKEN'
     #     config.candidates = 1
+    #     config.request_read_timeout = 5
+    #     config.request_open_timeout = 5
     #   end
     def configure
       self.configuration = Configuration.new

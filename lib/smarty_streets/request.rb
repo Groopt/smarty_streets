@@ -1,3 +1,5 @@
+require 'net/http'
+
 module SmartyStreets
   class Request
     class InvalidCredentials < Exception; end

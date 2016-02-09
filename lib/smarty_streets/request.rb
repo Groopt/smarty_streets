@@ -21,10 +21,10 @@ module SmartyStreets
     private
 
     def handle_response(response)
-      fail InvalidCredentials if response.code == 401
-      fail MalformedData      if response.code == 400
-      fail PaymentRequired    if response.code == 402
-      fail RemoteServerError  if response.code == 500
+      fail InvalidCredentials if response.code.to_i == 401
+      fail MalformedData      if response.code.to_i == 400
+      fail PaymentRequired    if response.code.to_i == 402
+      fail RemoteServerError  if response.code.to_i == 500
       fail NoValidCandidates  if response.body.nil?
 
       JSON.parse(response.body).collect do |l|
